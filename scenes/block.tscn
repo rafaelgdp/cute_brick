@@ -1,0 +1,66 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://scripts/block.gd" type="Script" id=1]
+[ext_resource path="res://sprites/1st_level_block.png" type="Texture" id=2]
+[ext_resource path="res://scripts/hit_block.gd" type="Script" id=3]
+[ext_resource path="res://sounds/shiny-blink.wav" type="AudioStream" id=4]
+[ext_resource path="res://sounds/frogblock01.wav" type="AudioStream" id=5]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 18, 18 )
+
+[sub_resource type="Shader" id=2]
+code = "shader_type canvas_item;
+
+uniform float show = 1;
+
+void fragment() {
+	COLOR = texture(TEXTURE , UV);
+	COLOR.a = show;
+}"
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
+shader_param/show = 1.0
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 16, 16 )
+
+[node name="block" type="StaticBody2D"]
+collision_layer = 4
+collision_mask = 8
+script = ExtResource( 1 )
+
+[node name="area" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource( 3 )
+
+[node name="area_collision" type="CollisionShape2D" parent="area"]
+shape = SubResource( 1 )
+
+[node name="sprite" type="Sprite" parent="."]
+material = SubResource( 3 )
+texture = ExtResource( 2 )
+
+[node name="collision" type="CollisionShape2D" parent="."]
+shape = SubResource( 4 )
+
+[node name="label_node" type="Node2D" parent="."]
+z_index = 1
+
+[node name="label" type="Label" parent="label_node"]
+margin_left = -5.0
+margin_top = -22.0
+margin_right = 35.0
+margin_bottom = -8.0
+align = 1
+valign = 1
+
+[node name="hit" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )
+bus = "fx"
+
+[node name="destroyed" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
+bus = "fx"

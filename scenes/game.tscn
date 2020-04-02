@@ -1,0 +1,67 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://scripts/game.gd" type="Script" id=1]
+[ext_resource path="res://scenes/shoot.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scripts/hit_bottom.gd" type="Script" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 180, 10 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 10, 320 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 180, 10 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 180, 11 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 10, 320 )
+
+[node name="game" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="top" type="StaticBody2D" parent="."]
+position = Vector2( 180, -10 )
+collision_mask = 8
+
+[node name="collision" type="CollisionShape2D" parent="top"]
+shape = SubResource( 1 )
+
+[node name="left" type="StaticBody2D" parent="."]
+position = Vector2( -10, 320 )
+collision_mask = 8
+
+[node name="collision" type="CollisionShape2D" parent="left"]
+shape = SubResource( 2 )
+
+[node name="bottom" type="StaticBody2D" parent="."]
+position = Vector2( 180, 650 )
+collision_layer = 2
+collision_mask = 8
+
+[node name="collision" type="CollisionShape2D" parent="bottom"]
+shape = SubResource( 3 )
+
+[node name="area" type="Area2D" parent="bottom"]
+script = ExtResource( 3 )
+
+[node name="area_collision" type="CollisionShape2D" parent="bottom/area"]
+shape = SubResource( 4 )
+
+[node name="right" type="StaticBody2D" parent="."]
+position = Vector2( 362, 320 )
+collision_mask = 8
+
+[node name="collision" type="CollisionShape2D" parent="right"]
+shape = SubResource( 5 )
+
+[node name="shoot" parent="." instance=ExtResource( 2 )]
+position = Vector2( 180, 630 )
+
+[node name="muzzle" type="Position2D" parent="shoot"]
+
+[node name="interval" type="Timer" parent="shoot"]
+wait_time = 0.1
+[connection signal="timeout" from="shoot/interval" to="shoot" method="_on_interval_timeout"]
