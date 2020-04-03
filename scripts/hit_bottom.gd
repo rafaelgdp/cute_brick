@@ -7,7 +7,7 @@ func _ready():
 
 func hit_bottom(node):
 	$"../../shoot".position = node.position
-	node.queue_free()
 	emit_signal("recharge")
+	node.queue_free()
 	pass
 

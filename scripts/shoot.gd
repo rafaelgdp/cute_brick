@@ -2,12 +2,12 @@ extends KinematicBody2D
 
 var ball = preload("res://scenes/ball.tscn")
 var velocity = Vector2()
-export (int) var cartridge = 10
+export (int) var cartridge = 50
 var initial_pos = Vector2()
 var wait = true
 
 func _ready():
-	connect("recharge" , self , "on_recharge")
+	self.connect("recharge" , self , "on_recharge")
 	
 func get_input():
 	velocity = Vector2()
@@ -39,4 +39,4 @@ func _on_interval_timeout():
 
 func on_recharge():
 	cartridge += 1
-	print("Cartirdge: " , cartridge)
+	print("Cartridge: " , cartridge)
