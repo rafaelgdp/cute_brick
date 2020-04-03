@@ -39,6 +39,7 @@ func _ready():
 				var brick = pre_brick.instance()
 				brick.global_position = Vector2(brick_x_idx[i],brick_y_idx[l])
 				add_child(brick)
-
+	
 func _draw():
 	draw_rect(Rect2(Vector2(0,0),Vector2(352,640)),Color(0,0,0,1),true)
+

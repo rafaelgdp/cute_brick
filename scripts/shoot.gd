@@ -4,15 +4,19 @@ var ball = preload("res://scenes/ball.tscn")
 var velocity = Vector2()
 export (int) var cartridge = 10
 var initial_pos = Vector2()
+var wait = true
 
+func _ready():
+	connect("recharge" , self , "on_recharge")
+	
 func get_input():
 	velocity = Vector2()
 	if Input.is_action_just_pressed("ui_shoot"):
+		wait = false
 		initial_pos = get_global_mouse_position() - $muzzle.global_position
 		shoot()
 
 func shoot():
-#	$sprite.visible = false
 	if cartridge > 0:
 		var b = ball.instance()
 		b.add_to_group("balls")
@@ -25,9 +29,14 @@ func shoot():
 		get_parent().add_child(b)
 		cartridge -= 1
 		$interval.start()
+		print(cartridge)
 
 func _physics_process(delta):
 	get_input()
 
 func _on_interval_timeout():
 	shoot()
+
+func on_recharge():
+	cartridge += 1
+	print("Cartirdge: " , cartridge)

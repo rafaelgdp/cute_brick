@@ -12,7 +12,6 @@ func _ready():
 func hit(damage , node):
 	health -= damage
 	var show_lv : float = health / init_health
-	print(show_lv)
 	emit_signal("hitted" , show_lv)
 	if health <= 0:
 		emit_signal("destroyed")

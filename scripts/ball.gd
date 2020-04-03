@@ -18,5 +18,4 @@ func _on_area_area_entered(area):
 	if area.has_method("hit"):
 		area.hit(damage , self)
 	if area.has_method("hit_bottom"):
-		emit_signal("hit_bottom" , self)
 		area.hit_bottom(self)
