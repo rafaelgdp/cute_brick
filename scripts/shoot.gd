@@ -2,13 +2,16 @@ extends KinematicBody2D
 
 var ball = preload("res://scenes/ball.tscn")
 var velocity = Vector2()
-export (int) var cartridge = 50
+export (int) var init_cartridge = 10
+export (int) var cartridge = init_cartridge
 var initial_pos = Vector2()
 var wait = true
 
+signal empty
+
 func _ready():
-	self.connect("recharge" , self , "on_recharge")
-	
+	$"../bottom/area".connect("recharge" , self , "on_recharge")
+
 func get_input():
 	velocity = Vector2()
 	if Input.is_action_just_pressed("ui_shoot"):
@@ -29,7 +32,10 @@ func shoot():
 		get_parent().add_child(b)
 		cartridge -= 1
 		$interval.start()
-		print(cartridge)
+	if cartridge == 0:
+		print("Cartridge: " , cartridge)
+		emit_signal("empty")
+		$interval.stop()
 
 func _physics_process(delta):
 	get_input()
@@ -38,5 +44,5 @@ func _on_interval_timeout():
 	shoot()
 
 func on_recharge():
-	cartridge += 1
-	print("Cartridge: " , cartridge)
+	cartridge = init_cartridge
+	print("Refill: " , cartridge)

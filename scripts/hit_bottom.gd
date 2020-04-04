@@ -1,13 +1,19 @@
 extends Area2D
 
+var wait_hit = true
+
 signal recharge
 
 func _ready():
-	pass # Replace with function body.
+	$"../../shoot".connect("empty" , self , "on_empty")
 
 func hit_bottom(node):
-	$"../../shoot".position = node.position
-	emit_signal("recharge")
+	if wait_hit == true:
+		$"../../shoot".position = node.position
+		wait_hit = false
 	node.queue_free()
 	pass
 
+func on_empty(cartridge):
+	print(wait_hit)
+	emit_signal("recharge")
