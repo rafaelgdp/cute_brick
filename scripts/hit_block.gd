@@ -2,6 +2,7 @@ extends Area2D
 
 signal destroyed
 signal hitted(display)
+signal pts(qt)
 
 onready var init_health : float = randi()%100+32
 onready var health : float = init_health
@@ -11,6 +12,7 @@ func _ready():
 
 func hit(damage , node):
 	health -= damage
+	emit_signal("pts" , damage)
 	var show_lv : float = health / init_health
 	emit_signal("hitted" , show_lv)
 	if health <= 0:

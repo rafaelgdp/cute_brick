@@ -3,7 +3,7 @@ extends KinematicBody2D
 
 var ball = preload("res://scenes/ball.tscn")
 var velocity = Vector2()
-export (int) var init_cartridge = 50
+export (int) var init_cartridge = 5
 var cartridge = init_cartridge
 var initial_pos = Vector2()
 var wait = true
@@ -19,6 +19,8 @@ func get_input():
 			initial_pos = get_global_mouse_position() - $muzzle.global_position
 			wait = false
 			shoot()
+		else:
+			pass
 
 func shoot():
 	if cartridge > 0:
@@ -40,7 +42,7 @@ func _physics_process(delta):
 		get_input()
 	else:
 		pass
-	$shoot_label.text = str(cartridge)
+	$"../shoot_sprite/shoot_label".text = str(cartridge)
 
 func _on_interval_timeout():
 	shoot()
@@ -48,3 +50,6 @@ func _on_interval_timeout():
 func on_recharge(waiting):
 	cartridge = init_cartridge
 	wait = waiting
+
+func on_stop_shoot(state):
+	wait = state

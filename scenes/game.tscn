@@ -40,12 +40,14 @@ shape = SubResource( 2 )
 [node name="bottom" type="StaticBody2D" parent="."]
 position = Vector2( 180, 650 )
 collision_layer = 2
-collision_mask = 8
+collision_mask = 12
 
 [node name="collision" type="CollisionShape2D" parent="bottom"]
 shape = SubResource( 3 )
 
 [node name="area" type="Area2D" parent="bottom"]
+collision_layer = 2
+collision_mask = 4
 script = ExtResource( 3 )
 
 [node name="area_collision" type="CollisionShape2D" parent="bottom/area"]
@@ -62,6 +64,17 @@ shape = SubResource( 5 )
 position = Vector2( 180, 630 )
 texture = ExtResource( 4 )
 
+[node name="shoot_label" type="Label" parent="shoot_sprite"]
+margin_left = -1.0
+margin_top = -7.0
+margin_right = 39.0
+margin_bottom = 7.0
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="shoot" parent="." instance=ExtResource( 2 )]
 position = Vector2( 180, 630 )
 
@@ -70,13 +83,10 @@ position = Vector2( 180, 630 )
 [node name="interval" type="Timer" parent="shoot"]
 wait_time = 0.1
 
-[node name="shoot_label" type="Label" parent="shoot"]
-margin_left = -1.0
-margin_top = -7.0
-margin_right = 39.0
-margin_bottom = 7.0
-align = 1
-valign = 1
+[node name="pts_label" type="Label" parent="."]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "Points: "
 __meta__ = {
 "_edit_use_anchors_": false
 }

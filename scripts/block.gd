@@ -53,3 +53,7 @@ func on_area_destroyed():
 	$label_node.queue_free()
 	yield($destroyed , "finished")
 	queue_free()
+
+func _on_area_area_entered(area):
+	if area.has_method("touch_bottom"):
+		area.touch_bottom(self)
