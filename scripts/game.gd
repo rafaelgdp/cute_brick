@@ -40,6 +40,9 @@ func _ready():
 				brick.global_position = Vector2(brick_x_idx[i],brick_y_idx[l])
 				add_child(brick)
 	
+	$shoot.connect("empty" , $bottom/area , "on_empty")
+	$bottom/area.connect("recharge" , $shoot , "on_recharge")
+	
 func _draw():
 	draw_rect(Rect2(Vector2(0,0),Vector2(352,640)),Color(0,0,0,1),true)
 

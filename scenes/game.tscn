@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scripts/game.gd" type="Script" id=1]
 [ext_resource path="res://scenes/shoot.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scripts/hit_bottom.gd" type="Script" id=3]
+[ext_resource path="res://sprites/ball.png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 180, 10 )
@@ -57,6 +58,10 @@ collision_mask = 8
 [node name="collision" type="CollisionShape2D" parent="right"]
 shape = SubResource( 5 )
 
+[node name="shoot_sprite" type="Sprite" parent="."]
+position = Vector2( 180, 630 )
+texture = ExtResource( 4 )
+
 [node name="shoot" parent="." instance=ExtResource( 2 )]
 position = Vector2( 180, 630 )
 
@@ -64,4 +69,15 @@ position = Vector2( 180, 630 )
 
 [node name="interval" type="Timer" parent="shoot"]
 wait_time = 0.1
+
+[node name="shoot_label" type="Label" parent="shoot"]
+margin_left = -1.0
+margin_top = -7.0
+margin_right = 39.0
+margin_bottom = 7.0
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="timeout" from="shoot/interval" to="shoot" method="_on_interval_timeout"]
