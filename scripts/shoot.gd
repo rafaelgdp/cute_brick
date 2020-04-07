@@ -3,11 +3,10 @@ extends KinematicBody2D
 
 var ball = preload("res://scenes/ball.tscn")
 var velocity = Vector2()
-export (int) var init_cartridge = 5
+export (int) var init_cartridge = 50
 var cartridge = init_cartridge
 var initial_pos = Vector2()
 var wait = true
-
 
 func _ready():
 	pass

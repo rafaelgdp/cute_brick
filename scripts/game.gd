@@ -63,14 +63,17 @@ func on_brick_down():
 		for i in range(0 , br.size()):
 			br[i].position.y += 32
 
-func on_pts(points):
-	print("Hi")
-	total_pts += points
+func on_pts(damage):
+	print(damage)
+	total_pts += damage
 	print(total_pts)
 
 func on_game_over():
 	stop = true
 	$shoot/interval.stop()
 	$shoot.visible = false
+	$shoot_sprite.visible = false
+	$game_over_label.visible = true
+#	print(bricks)
+#	bricks.material.set_shader_param("show" , 0.5)
 	emit_signal("stop_shoot" , false)
-	pass
