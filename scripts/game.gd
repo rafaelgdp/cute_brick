@@ -31,10 +31,10 @@ var brick_y_idx = [
 ]
 
 signal stop_shoot(state)
+signal shade_all(shade)
 
 func _ready():
 	add_bricks()
-	$pts_label.text = str("Points: " , total_pts)
 
 	$shoot.connect("empty" , $bottom/area , "on_empty")
 	$bottom/area.connect("recharge" , $shoot , "on_recharge")
@@ -50,6 +50,7 @@ func on_brick_down():
 		var br = get_tree().get_nodes_in_group("bricks")
 		for i in range(0 , br.size()):
 			br[i].position.y += 32
+		
 		var brick_x_size = brick_x_idx.size()
 		for i in range(0,brick_x_size):
 			randomize()
@@ -59,22 +60,13 @@ func on_brick_down():
 				brick.global_position = Vector2(brick_x_idx[i],48)
 				add_child(brick)
 				brick.add_to_group("bricks")
-				brick.connect("pts" , self , "on_pts")
+				brick.get_node("area").connect("pts" , self , "on_pts")
 
-func on_pts(damage):
-	print(damage)
-	total_pts += damage
-	print(total_pts)
+func _process(delta):
+	$pts_label.text = str("Points: " , total_pts)
 
-func on_game_over():
-	stop = true
-	$shoot/interval.stop()
-	$shoot.visible = false
-	$shoot_sprite.visible = false
-	$game_over_label.visible = true
-#	print(bricks)
-#	bricks.material.set_shader_param("show" , 0.5)
-	emit_signal("stop_shoot" , false)
+func on_pts(pts):
+	total_pts += pts
 
 func add_bricks():
 	var brick_y_size = brick_y_idx.size()
@@ -88,4 +80,16 @@ func add_bricks():
 				brick.global_position = Vector2(brick_x_idx[i],brick_y_idx[l])
 				add_child(brick)
 				brick.add_to_group("bricks")
-				brick.connect("pts" , self , "on_pts")
+				brick.get_node("area").connect("pts" , self , "on_pts")
+
+func on_game_over():
+	stop = true
+	$shoot/interval.stop()
+	$shoot.visible = false
+	$shoot_sprite.visible = false
+	$label_node/game_over_label.visible = true
+	$label_node/game_over_label/go_pts_label.text = str("Total Points\n" , total_pts)
+	for i in get_tree().get_nodes_in_group("bricks"):
+		i.get_node("sprite").material.set_shader_param("show" , 0.1)
+		i.get_node("label_node").visible = false
+	emit_signal("stop_shoot" , false)

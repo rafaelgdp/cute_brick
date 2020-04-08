@@ -37,9 +37,6 @@ func _ready():
 	$area.connect("hitted" , self , "on_area_hitted")
 	$area.connect("destroyed" , self , "on_area_destroyed")
 
-func _process(delta):
-	pass
-
 func on_area_hitted(display):
 	$hit.play()
 	if display < 0.1:
