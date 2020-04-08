@@ -30,7 +30,9 @@ func _ready():
 	preload("res://sprites/10th_level_block.png")  #9
 	]
 	
-	var skin_pos = pos_y_idx.find(int(self.global_position.y))
+#	var skin_pos = pos_y_idx.find(int(self.global_position.y))
+	randomize()
+	var skin_pos = randi()%9
 	$sprite.set_texture(skin[skin_pos])
 	$area.connect("hitted" , self , "on_area_hitted")
 	$area.connect("destroyed" , self , "on_area_destroyed")
@@ -52,7 +54,7 @@ func on_area_destroyed():
 	$collision.queue_free()
 	$label_node.queue_free()
 	yield($destroyed , "finished")
-	queue_free()
+	self.queue_free()
 
 func _on_area_area_entered(area):
 	if area.has_method("touch_bottom"):

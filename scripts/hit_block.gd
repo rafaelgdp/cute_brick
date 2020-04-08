@@ -4,7 +4,7 @@ signal destroyed
 signal hitted(display)
 signal pts(qt)
 
-onready var init_health : float = randi()%100+32
+onready var init_health : float = randi() % 80 + 15
 onready var health : float = init_health
 
 func _ready():

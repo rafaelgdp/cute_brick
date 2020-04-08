@@ -3,7 +3,6 @@ extends Node2D
 onready var pre_brick = preload("res://scenes/block.tscn")
 var stop = false
 var total_pts = 0
-var bricks = null
 
 var brick_x_idx = [
 16,  #0
@@ -34,25 +33,14 @@ var brick_y_idx = [
 signal stop_shoot(state)
 
 func _ready():
-	var brick_y_size = brick_y_idx.size()
-	var brick_x_size = brick_x_idx.size()
-	for l in range(0,brick_y_size):
-		for i in range(0,brick_x_size):
-			randomize()
-			var add_brick = randi()%2
-			if add_brick == 1:
-				var brick = pre_brick.instance()
-				bricks = brick
-				brick.global_position = Vector2(brick_x_idx[i],brick_y_idx[l])
-				add_child(brick)
-				brick.add_to_group("bricks")
+	add_bricks()
+	$pts_label.text = str("Points: " , total_pts)
 
 	$shoot.connect("empty" , $bottom/area , "on_empty")
 	$bottom/area.connect("recharge" , $shoot , "on_recharge")
 	$bottom/area.connect("game_over" , self , "on_game_over")
 	$bottom/area.connect("brick_down" , self , "on_brick_down")
 	self.connect("stop_shoot" , $shoot , "on_stop_shoot")
-	bricks.connect("pts" , self , "on_pts")
 
 func _draw():
 	draw_rect(Rect2(Vector2(0,0),Vector2(352,640)),Color(0,0,0,1),true)
@@ -62,6 +50,16 @@ func on_brick_down():
 		var br = get_tree().get_nodes_in_group("bricks")
 		for i in range(0 , br.size()):
 			br[i].position.y += 32
+		var brick_x_size = brick_x_idx.size()
+		for i in range(0,brick_x_size):
+			randomize()
+			var add_brick = randi()%4
+			if add_brick == 1 or add_brick == 2:
+				var brick = pre_brick.instance()
+				brick.global_position = Vector2(brick_x_idx[i],48)
+				add_child(brick)
+				brick.add_to_group("bricks")
+				brick.connect("pts" , self , "on_pts")
 
 func on_pts(damage):
 	print(damage)
@@ -77,3 +75,17 @@ func on_game_over():
 #	print(bricks)
 #	bricks.material.set_shader_param("show" , 0.5)
 	emit_signal("stop_shoot" , false)
+
+func add_bricks():
+	var brick_y_size = brick_y_idx.size()
+	var brick_x_size = brick_x_idx.size()
+	for l in range(0,brick_y_size):
+		for i in range(0,brick_x_size):
+			randomize()
+			var add_brick = randi()%4
+			if add_brick == 1 or add_brick == 2:
+				var brick = pre_brick.instance()
+				brick.global_position = Vector2(brick_x_idx[i],brick_y_idx[l])
+				add_child(brick)
+				brick.add_to_group("bricks")
+				brick.connect("pts" , self , "on_pts")
