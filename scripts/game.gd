@@ -34,7 +34,7 @@ signal stop_shoot(state)
 signal shade_all(shade)
 
 func _ready():
-	add_bricks()
+	add_bricks(brick_y_idx.size())
 
 	$shoot.connect("empty" , $bottom/area , "on_empty")
 	$bottom/area.connect("recharge" , $shoot , "on_recharge")
@@ -51,16 +51,7 @@ func on_brick_down():
 		for i in range(0 , br.size()):
 			br[i].position.y += 32
 		
-		var brick_x_size = brick_x_idx.size()
-		for i in range(0,brick_x_size):
-			randomize()
-			var add_brick = randi()%4
-			if add_brick == 1 or add_brick == 2:
-				var brick = pre_brick.instance()
-				brick.global_position = Vector2(brick_x_idx[i],48)
-				add_child(brick)
-				brick.add_to_group("bricks")
-				brick.get_node("area").connect("pts" , self , "on_pts")
+		add_bricks(1)
 
 func _process(delta):
 	$pts_label.text = str("Points: " , total_pts)
@@ -68,8 +59,8 @@ func _process(delta):
 func on_pts(pts):
 	total_pts += pts
 
-func add_bricks():
-	var brick_y_size = brick_y_idx.size()
+func add_bricks(y):
+	var brick_y_size = y
 	var brick_x_size = brick_x_idx.size()
 	for l in range(0,brick_y_size):
 		for i in range(0,brick_x_size):

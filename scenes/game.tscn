@@ -36,6 +36,7 @@ script = ExtResource( 1 )
 z_index = 1
 
 [node name="game_over_label" type="Label" parent="label_node"]
+visible = false
 margin_left = 132.0
 margin_top = 181.0
 margin_right = 228.0
