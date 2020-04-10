@@ -1,9 +1,18 @@
 extends Node2D
 
+# onready vars
+# preload the blocks, the shooter and game over menu
 onready var pre_brick = preload("res://scenes/block.tscn")
+onready var pre_shoot = preload("res://scenes/shoot.tscn")
+onready var pre_game_over = preload("res://scenes/game_over.tscn")
+
 var stop = false
 var total_pts = 0
+var pts_counter = 0
+var shoot_node = null
+var go_node = null
 
+#
 var brick_x_idx = [
 16,  #0
 48,  #1
@@ -30,34 +39,37 @@ var brick_y_idx = [
 336  #9
 ]
 
+# Signals
 signal stop_shoot(state)
-signal shade_all(shade)
+signal add_health()
 
 func _ready():
+# Call add_bricks to add the initial blocks
 	add_bricks(brick_y_idx.size())
+	add_shooter()
 
-	$shoot.connect("empty" , $bottom/area , "on_empty")
-	$bottom/area.connect("recharge" , $shoot , "on_recharge")
-	$bottom/area.connect("game_over" , self , "on_game_over")
-	$bottom/area.connect("brick_down" , self , "on_brick_down")
-	self.connect("stop_shoot" , $shoot , "on_stop_shoot")
+# Connections to signals
+#	$bottom/area.connect("recharge" , $shoot , "on_recharge")
+	SIGN.connect("game_over" , self , "on_game_over")
+	SIGN.connect("brick_down" , self , "on_brick_down")
+	SIGN.connect("new_game" , self , "on_new_game")
+	SIGN.connect("update_cartridge" , self , "on_update_cartridge")
 
 func _draw():
 	draw_rect(Rect2(Vector2(0,0),Vector2(352,640)),Color(0,0,0,1),true)
 
-func on_brick_down():
-	if stop == false:
-		var br = get_tree().get_nodes_in_group("bricks")
-		for i in range(0 , br.size()):
-			br[i].position.y += 32
-		
-		add_bricks(1)
-
 func _process(delta):
 	$pts_label.text = str("Points: " , total_pts)
+	self.update()
 
-func on_pts(pts):
-	total_pts += pts
+# 'Add' functions
+# Add the shooter and the blocks
+# Store the nodes in the groups "muzzle" and "bricks" respectively
+func add_shooter():
+	var s = pre_shoot.instance()
+	s.add_to_group("muzzle")
+	s.global_position = Vector2(180 , 630)
+	call_deferred("add_child" , s)
 
 func add_bricks(y):
 	var brick_y_size = y
@@ -69,18 +81,102 @@ func add_bricks(y):
 			if add_brick == 1 or add_brick == 2:
 				var brick = pre_brick.instance()
 				brick.global_position = Vector2(brick_x_idx[i],brick_y_idx[l])
-				add_child(brick)
+				call_deferred("add_child" , brick)
 				brick.add_to_group("bricks")
 				brick.get_node("area").connect("pts" , self , "on_pts")
+				brick.connect("bonus_pts" , self , "on_bonus_pts")
+				self.connect("add_health" , brick.get_node("area") , "on_add_health")
 
+# Function on_brick_down()
+# Controls how the blocks go down
+func on_brick_down():
+	if stop == false:
+		var br = get_tree().get_nodes_in_group("bricks")
+		for i in range(0 , br.size()):
+			br[i].position.y += 32
+		
+		add_bricks(1)
+
+# Points functions
+# Updates the points and points counter
+# Emits signal "add_health" to update the difficulty of the game,
+# making blocks healthier
+func on_pts(pts):
+	total_pts += pts
+	pts_counter += pts
+	if pts_counter == 10000:
+		emit_signal("add_health")
+		pts_counter = 0
+
+# Increases total_pts when a block is destroyed
+func on_bonus_pts(bonus):
+	total_pts += bonus
+
+func on_update_cartridge(cartridge):
+	$shoot_sprite/shoot_label.text = cartridge
+
+# Function on_game_over()
+# Display game over screen, hide block health
+# and queue_free() the shooter when the game is over
 func on_game_over():
 	stop = true
-	$shoot/interval.stop()
-	$shoot.visible = false
-	$shoot_sprite.visible = false
-	$label_node/game_over_label.visible = true
-	$label_node/game_over_label/go_pts_label.text = str("Total Points\n" , total_pts)
-	for i in get_tree().get_nodes_in_group("bricks"):
-		i.get_node("sprite").material.set_shader_param("show" , 0.1)
+
+	# Hide blocks health points
+	var b_roll = get_tree().get_nodes_in_group("bricks")
+	for i in b_roll:
 		i.get_node("label_node").visible = false
-	emit_signal("stop_shoot" , false)
+
+	# Queue free the shooter
+	# Hides the shooter sprite
+	var m = get_tree().get_nodes_in_group("muzzle")
+	m[0].queue_free()
+	$shoot_sprite.visible = false
+	
+	# Add the game over display into the scene
+	if go_node == null:
+		print("1")
+		add_display()
+	else:
+		pass
+#		print("2")
+#		print(get_tree().root.find_node(str(go_node.name)))
+#		if !go_node.is_inside_tree():
+#			add_display()
+#		else:
+#			print("3")
+#			pass
+		
+
+func add_display():
+	go_node = pre_game_over.instance()
+	print("go_node: " , go_node.name)
+	call_deferred("add_child" , go_node)
+	go_node.get_node("game_over_label/go_pts_label").text = str("Total Points\n" , total_pts)
+
+# Function
+func on_new_game():
+	stop = false
+	go_node = null
+	# Resets the points e points counter
+	total_pts = 0
+	pts_counter = 0
+	
+	# Clear the blocks
+	var b = get_tree().get_nodes_in_group("bricks")
+	for i in b:
+		i.queue_free()
+		i.remove_from_group("bricks")
+	
+	# Add blocks again
+	add_bricks(brick_y_idx.size())
+	
+	# Add shooter again
+	var s = pre_shoot.instance()
+	s.add_to_group("muzzle")
+	s.global_position = Vector2(180 , 630)
+	get_parent().call_deferred("add_child" , s)
+	$shoot_sprite.visible = true
+	
+	# Queue free game over node from scene
+	SIGN.emit_signal("clear_screen")
+	$shoot_sprite.global_position = Vector2(180 , 630)

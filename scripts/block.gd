@@ -13,6 +13,8 @@ onready var pos_y_idx = [
 336  #9
 ]
 
+signal bonus_pts(bonus)
+
 func _ready():
 	var sprite = $sprite.get_material().duplicate(true)
 	$sprite.set_material(sprite)
@@ -29,8 +31,7 @@ func _ready():
 	preload("res://sprites/9th_level_block.png"), #8
 	preload("res://sprites/10th_level_block.png")  #9
 	]
-	
-#	var skin_pos = pos_y_idx.find(int(self.global_position.y))
+
 	randomize()
 	var skin_pos = randi()%9
 	$sprite.set_texture(skin[skin_pos])
@@ -51,6 +52,7 @@ func on_area_destroyed():
 	$collision.queue_free()
 	$label_node.queue_free()
 	yield($destroyed , "finished")
+	emit_signal("bonus_pts" , 10)
 	self.queue_free()
 
 func _on_area_area_entered(area):
