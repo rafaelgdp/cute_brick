@@ -11,6 +11,9 @@ var total_pts = 0
 var pts_counter = 0
 var shoot_node = null
 var go_node = null
+var health_bonus = 0
+var min_health_bonus = 0
+var hide_aim = false
 
 #
 var brick_x_idx = [
@@ -39,9 +42,7 @@ var brick_y_idx = [
 336  #9
 ]
 
-# Signals
-signal stop_shoot(state)
-signal add_health()
+const LINE_LENGTH = 15
 
 func _ready():
 # Call add_bricks to add the initial blocks
@@ -49,20 +50,35 @@ func _ready():
 	add_shooter()
 
 # Connections to signals
-#	$bottom/area.connect("recharge" , $shoot , "on_recharge")
 	SIGN.connect("game_over" , self , "on_game_over")
 	SIGN.connect("brick_down" , self , "on_brick_down")
 	SIGN.connect("new_game" , self , "on_new_game")
 	SIGN.connect("update_cartridge" , self , "on_update_cartridge")
+	SIGN.connect("aim" , self , "aim")
 
 func _draw():
 	draw_rect(Rect2(Vector2(0,0),Vector2(352,640)),Color(0,0,0,1),true)
+	var start = $shoot_sprite.global_position
+	var dir = start.direction_to(get_global_mouse_position())
+	var end = start + (dir*LINE_LENGTH)
+	if hide_aim == false and stop == false:
+		for i in range(1 , 12):
+			var c = i
+			if (c % 2) != 0:
+				draw_line(start, end , Color(0,1,0,1), 2)
+			else:
+				draw_line(start, end , Color(0,0,0,0))
+			var next_start = end
+			start = next_start
+			end = start + (dir*LINE_LENGTH)
+	else:
+		draw_line(start, end , Color(0,0,0,1), 1)
 
 func _process(delta):
 	$pts_label.text = str("Points: " , total_pts)
-	self.update()
+	update()
 
-# 'Add' functions
+# "Add" functions
 # Add the shooter and the blocks
 # Store the nodes in the groups "muzzle" and "bricks" respectively
 func add_shooter():
@@ -70,6 +86,9 @@ func add_shooter():
 	s.add_to_group("muzzle")
 	s.global_position = Vector2(180 , 630)
 	call_deferred("add_child" , s)
+
+func aim(state):
+	hide_aim = state
 
 func add_bricks(y):
 	var brick_y_size = y
@@ -81,11 +100,12 @@ func add_bricks(y):
 			if add_brick == 1 or add_brick == 2:
 				var brick = pre_brick.instance()
 				brick.global_position = Vector2(brick_x_idx[i],brick_y_idx[l])
+				brick.get_node("area").health_idx += health_bonus
+				brick.get_node("area").min_health_idx += min_health_bonus
 				call_deferred("add_child" , brick)
 				brick.add_to_group("bricks")
 				brick.get_node("area").connect("pts" , self , "on_pts")
 				brick.connect("bonus_pts" , self , "on_bonus_pts")
-				self.connect("add_health" , brick.get_node("area") , "on_add_health")
 
 # Function on_brick_down()
 # Controls how the blocks go down
@@ -99,13 +119,14 @@ func on_brick_down():
 
 # Points functions
 # Updates the points and points counter
-# Emits signal "add_health" to update the difficulty of the game,
+# Add healt_bonus to update the difficulty of the game,
 # making blocks healthier
 func on_pts(pts):
 	total_pts += pts
 	pts_counter += pts
-	if pts_counter == 10000:
-		emit_signal("add_health")
+	if pts_counter == 5000:
+		health_bonus += 1
+		min_health_bonus += 1
 		pts_counter = 0
 
 # Increases total_pts when a block is destroyed
@@ -134,22 +155,12 @@ func on_game_over():
 	
 	# Add the game over display into the scene
 	if go_node == null:
-		print("1")
 		add_display()
 	else:
 		pass
-#		print("2")
-#		print(get_tree().root.find_node(str(go_node.name)))
-#		if !go_node.is_inside_tree():
-#			add_display()
-#		else:
-#			print("3")
-#			pass
-		
 
 func add_display():
 	go_node = pre_game_over.instance()
-	print("go_node: " , go_node.name)
 	call_deferred("add_child" , go_node)
 	go_node.get_node("game_over_label/go_pts_label").text = str("Total Points\n" , total_pts)
 
@@ -160,6 +171,8 @@ func on_new_game():
 	# Resets the points e points counter
 	total_pts = 0
 	pts_counter = 0
+	health_bonus = 0
+	min_health_bonus = 0
 	
 	# Clear the blocks
 	var b = get_tree().get_nodes_in_group("bricks")

@@ -8,6 +8,7 @@ signal brick_down
 signal free_b_node(node)
 signal b_node_freed
 signal game_over
+signal aim(state)
 
 func _ready():
 	pass

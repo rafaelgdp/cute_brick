@@ -5,6 +5,7 @@ signal hitted(display)
 signal pts(qt)
 
 var health_idx = 80
+var min_health_idx = 15
 onready var init_health : float = randi() % health_idx + 15
 onready var health : float = init_health
 
@@ -18,10 +19,6 @@ func hit(damage , node):
 	emit_signal("hitted" , show_lv)
 	if health <= 0:
 		emit_signal("destroyed")
-
-func on_add_health():
-	health_idx += 1
-	print("health_idx: " , health_idx)
 
 func _process(delta):
 	$"../label_node/label".text = str(health)
