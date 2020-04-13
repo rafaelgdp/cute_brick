@@ -3,6 +3,7 @@ extends Area2D
 signal destroyed
 signal hitted(display)
 signal pts(qt)
+signal change_anim
 
 var health_idx = 80
 var min_health_idx = 15
@@ -13,6 +14,8 @@ func _ready():
 	pass
 
 func hit(damage , node):
+#	$"../sprite".play("hit")
+	emit_signal("change_anim")
 	health -= damage
 	emit_signal("pts" , damage)
 	var show_lv : float = health / init_health

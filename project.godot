@@ -15,7 +15,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="cute_brick"
+config/name="Cute Brick"
 run/main_scene="res://scenes/game.tscn"
 config/icon="res://icon.png"
 

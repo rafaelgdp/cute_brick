@@ -34,9 +34,25 @@ func _ready():
 
 	randomize()
 	var skin_pos = randi()%9
-	$sprite.set_texture(skin[skin_pos])
+#	$sprite.set_texture(skin[skin_pos])
+	$sprite.play("idle")
 	$area.connect("hitted" , self , "on_area_hitted")
 	$area.connect("destroyed" , self , "on_area_destroyed")
+	$area.connect("change_anim" , self , "on_change_anim")
+
+func on_change_anim():
+	$sprite.play("hurt")
+	shake_block()
+	$sprite.connect("animation_finished" , self , "on_anim_finished")
+
+func shake_block():
+	$sprite.position = Vector2(3,0)
+	$sprite.position = Vector2(0,3)
+	$sprite.position = Vector2(-3,0)
+	$sprite.position = Vector2(0,-3)
+
+func on_anim_finished():
+	$sprite.play("idle")
 
 func on_area_hitted(display):
 	$hit.play()
