@@ -1,5 +1,18 @@
 extends StaticBody2D
 
+onready var skin = [
+	"white",		#0
+	"pink",			#1
+	"green",		#2
+	"cyan",			#3
+	"blue",			#4
+	"purple",		#5
+	"heavy_blue",	#6
+	"yellow",		#7
+	"orange",		#8
+	"red"			#9
+]
+
 onready var pos_y_idx = [
 48,  #0
 80,  #1
@@ -13,52 +26,40 @@ onready var pos_y_idx = [
 336  #9
 ]
 
+var color_idx = 0
+
 signal bonus_pts(bonus)
 
 func _ready():
 	var sprite = $sprite.get_material().duplicate(true)
 	$sprite.set_material(sprite)
-	
-	var skin = [
-	preload("res://sprites/1st_level_block.png"), #0
-	preload("res://sprites/2nd_level_block.png"), #1
-	preload("res://sprites/3rd_level_block.png"), #2
-	preload("res://sprites/4th_level_block.png"), #3
-	preload("res://sprites/5th_level_block.png"), #4
-	preload("res://sprites/6th_level_block.png"), #5
-	preload("res://sprites/7th_level_block.png"), #6
-	preload("res://sprites/8th_level_block.png"), #7
-	preload("res://sprites/9th_level_block.png"), #8
-	preload("res://sprites/10th_level_block.png")  #9
-	]
 
-	randomize()
-	var skin_pos = randi()%9
-#	$sprite.set_texture(skin[skin_pos])
-	$sprite.play("idle")
+	$sprite.play("idle-" + skin[color_idx])
 	$area.connect("hitted" , self , "on_area_hitted")
 	$area.connect("destroyed" , self , "on_area_destroyed")
 	$area.connect("change_anim" , self , "on_change_anim")
 
-func on_change_anim():
-	$sprite.play("hurt")
-	shake_block()
-	$sprite.connect("animation_finished" , self , "on_anim_finished")
-
-func shake_block():
-	$sprite.position = Vector2(3,0)
-	$sprite.position = Vector2(0,3)
-	$sprite.position = Vector2(-3,0)
-	$sprite.position = Vector2(0,-3)
+func on_change_anim(color):
+	print("skin: " , skin[color])
+	$sprite.play("hurt-" + skin[color])
+	color_idx = color
+	$block_hit.play("hit")
+	if is_connected("animation_finished" , self , "on_animation_finished"):
+		$sprite.disconnect("animation_finished" , self , "on_anim_finished")
+		$sprite.connect("animation_finished" , self , "on_anim_finished")
+	else:
+		$sprite.connect("animation_finished" , self , "on_anim_finished")
 
 func on_anim_finished():
-	$sprite.play("idle")
+	print("skin2: " , skin[color_idx])
+	$sprite.play("idle-" + skin[color_idx])
+	$sprite.disconnect("animation_finished" , self , "on_anim_finished")
 
-func on_area_hitted(display):
+func on_area_hitted():
 	$hit.play()
-	if display < 0.1:
-		display = 0.1
-	$sprite.material.set_shader_param("show" , display)
+#	if display < 0.1:
+#		display = 0.1
+#	$sprite.material.set_shader_param("show" , display)
 	yield($hit , "finished")
 
 func on_area_destroyed():

@@ -124,9 +124,9 @@ func on_brick_down():
 func on_pts(pts):
 	total_pts += pts
 	pts_counter += pts
-	if pts_counter == 5000:
-		health_bonus += 1
-		min_health_bonus += 1
+	if pts_counter == 2000:
+		health_bonus += 5
+		min_health_bonus += 5
 		pts_counter = 0
 
 # Increases total_pts when a block is destroyed
