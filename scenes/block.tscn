@@ -280,9 +280,9 @@ shape = SubResource( 1 )
 
 [node name="sprite" type="AnimatedSprite" parent="."]
 material = SubResource( 3 )
-position = Vector2( 0, -1 )
 frames = SubResource( 4 )
 animation = "hurt-red"
+frame = 1
 playing = true
 
 [node name="collision" type="CollisionShape2D" parent="."]

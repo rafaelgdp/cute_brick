@@ -22,6 +22,7 @@ config/icon="res://icon.png"
 [autoload]
 
 SIGN="*res://scripts/notification.gd"
+DATA="*res://scripts/data.gd"
 
 [display]
 

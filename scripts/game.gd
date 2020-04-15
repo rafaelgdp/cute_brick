@@ -6,6 +6,7 @@ onready var pre_brick = preload("res://scenes/block.tscn")
 onready var pre_shoot = preload("res://scenes/shoot.tscn")
 onready var pre_game_over = preload("res://scenes/game_over.tscn")
 
+# Vars
 var stop = false
 var total_pts = 0
 var pts_counter = 0
@@ -14,6 +15,7 @@ var go_node = null
 var health_bonus = 0
 var min_health_bonus = 0
 var hide_aim = false
+var best_score = 0
 
 #
 var brick_x_idx = [
@@ -42,9 +44,12 @@ var brick_y_idx = [
 336  #9
 ]
 
+# Constants
 const LINE_LENGTH = 15
 
 func _ready():
+	$save.add_to_group("persist")
+	
 # Call add_bricks to add the initial blocks
 	add_bricks(brick_y_idx.size())
 	add_shooter()
@@ -133,6 +138,7 @@ func on_pts(pts):
 func on_bonus_pts(bonus):
 	total_pts += bonus
 
+# Update the cartridge label
 func on_update_cartridge(cartridge):
 	$shoot_sprite/shoot_label.text = cartridge
 
@@ -158,11 +164,21 @@ func on_game_over():
 		add_display()
 	else:
 		pass
-
+	best_score = DATA.game.high_score
+	if total_pts > best_score:
+		DATA.game.high_score = total_pts
+		DATA.save_game()
+	else:
+		pass
+	
 func add_display():
 	go_node = pre_game_over.instance()
 	call_deferred("add_child" , go_node)
 	go_node.get_node("game_over_label/go_pts_label").text = str("Total Points\n" , total_pts)
+	if total_pts > DATA.game.high_score:
+		go_node.get_node("game_over_label/high_label").text = str("NEW HIGH SCORE!")
+	else:
+		pass
 
 # Function
 func on_new_game():

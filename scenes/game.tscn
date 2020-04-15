@@ -81,3 +81,5 @@ text = "Points: "
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="save" type="Node2D" parent="."]

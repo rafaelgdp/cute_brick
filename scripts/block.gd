@@ -1,5 +1,6 @@
 extends StaticBody2D
 
+# onready vars
 onready var skin = [
 	"white",		#0
 	"pink",			#1
@@ -26,21 +27,22 @@ onready var pos_y_idx = [
 336  #9
 ]
 
+# Vars
 var color_idx = 0
 
+# Signals
 signal bonus_pts(bonus)
 
 func _ready():
-	var sprite = $sprite.get_material().duplicate(true)
-	$sprite.set_material(sprite)
 
+	# Set the skin
 	$sprite.play("idle-" + skin[color_idx])
+	#
 	$area.connect("hitted" , self , "on_area_hitted")
 	$area.connect("destroyed" , self , "on_area_destroyed")
 	$area.connect("change_anim" , self , "on_change_anim")
 
 func on_change_anim(color):
-	print("skin: " , skin[color])
 	$sprite.play("hurt-" + skin[color])
 	color_idx = color
 	$block_hit.play("hit")
@@ -51,15 +53,11 @@ func on_change_anim(color):
 		$sprite.connect("animation_finished" , self , "on_anim_finished")
 
 func on_anim_finished():
-	print("skin2: " , skin[color_idx])
 	$sprite.play("idle-" + skin[color_idx])
 	$sprite.disconnect("animation_finished" , self , "on_anim_finished")
 
 func on_area_hitted():
 	$hit.play()
-#	if display < 0.1:
-#		display = 0.1
-#	$sprite.material.set_shader_param("show" , display)
 	yield($hit , "finished")
 
 func on_area_destroyed():

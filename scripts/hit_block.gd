@@ -40,8 +40,6 @@ func hit(damage , node):
 	emit_signal("change_anim" , color)
 	health -= damage
 	emit_signal("pts" , damage)
-	
-#	var show_lv : float = health / init_health
 	emit_signal("hitted")
 	if health <= 0:
 		emit_signal("destroyed")
