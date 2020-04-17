@@ -1,11 +1,31 @@
 extends Node2D
 
-#func _on_play_button_pressed():
-#	get_tree().change_scene("res://scenes/game.tscn")
+var go_sound = preload("res://scenes/sound_menu.tscn")
+var go_credits = preload("res://scenes/credits.tscn")
+
+func _ready():
+	SIGN.connect("display_menu" , self , "on_display_menu")
+	$play_button.add_to_group("menu_buttons")
+	$sound_button.add_to_group("menu_buttons")
+	$credits_button.add_to_group("menu_buttons")
+
+func _on_play_button_pressed():
+	get_tree().change_scene("res://scenes/game.tscn")
 
 func _on_sound_button_pressed():
-	get_tree().change_scene("res://scenes/sound_menu.tscn")
+	hide_buttons(false)
+	var s = go_sound.instance()
+	get_parent().call_deferred("add_child" , s)
 
+func _on_credits_button_pressed():
+	hide_buttons(false)
+	var c = go_credits.instance()
+	get_parent().call_deferred("add_child" , c)
 
-func _on_play_button_button_down():
-	get_tree().change_scene("res://scenes/game.tscn")
+func hide_buttons(state):
+	var menu_display = get_tree().get_nodes_in_group("menu_buttons")
+	for i in menu_display:
+		i.visible = state
+
+func on_display_menu():
+	hide_buttons(true)

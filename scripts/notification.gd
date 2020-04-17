@@ -11,6 +11,7 @@ signal game_over
 signal aim(state)
 signal add_ball
 signal remove_ball
+signal display_menu
 
 func _ready():
 	pass

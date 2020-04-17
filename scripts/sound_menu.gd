@@ -36,6 +36,6 @@ func _on_fx_plus_pressed():
 		fx_volume = 6
 	$hit.play()
 
-
 func _on_back_pressed():
-	get_tree().change_scene("res://scenes/title.tscn")
+	SIGN.emit_signal("display_menu")
+	self.queue_free()

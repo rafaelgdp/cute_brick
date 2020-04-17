@@ -26,18 +26,18 @@ animations = [ {
 [sub_resource type="DynamicFont" id=2]
 size = 14
 outline_size = 2
-outline_color = Color( 0.501961, 0.501961, 0.501961, 1 )
+outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 13 )
 
 [sub_resource type="DynamicFont" id=3]
 size = 14
 outline_size = 2
-outline_color = Color( 0.501961, 0.501961, 0.501961, 1 )
+outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 13 )
 
 [sub_resource type="DynamicFont" id=4]
 outline_size = 2
-outline_color = Color( 0.501961, 0.501961, 0.501961, 1 )
+outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 13 )
 
 [node name="title" type="Node2D"]
@@ -47,7 +47,7 @@ script = ExtResource( 14 )
 position = Vector2( 178, 320 )
 scale = Vector2( 1.01179, 1.01179 )
 frames = SubResource( 1 )
-frame = 11
+frame = 10
 playing = true
 
 [node name="play_button" type="Button" parent="."]
@@ -87,6 +87,6 @@ flat = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
-[connection signal="button_down" from="play_button" to="." method="_on_play_button_button_down"]
 [connection signal="pressed" from="play_button" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="sound_button" to="." method="_on_sound_button_pressed"]
+[connection signal="pressed" from="credits_button" to="." method="_on_credits_button_pressed"]
