@@ -23,6 +23,8 @@ func _on_area_area_entered(area):
 		area.hit(damage , self)
 	if area.has_method("hit_bottom"):
 		area.hit_bottom(self)
+	if area.has_method("collect"):
+		area.collect(self)
 
 func on_free_b_node(node):
 	if node.is_in_group("balls"):

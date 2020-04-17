@@ -282,7 +282,6 @@ shape = SubResource( 1 )
 material = SubResource( 3 )
 frames = SubResource( 4 )
 animation = "hurt-red"
-frame = 1
 playing = true
 
 [node name="collision" type="CollisionShape2D" parent="."]

@@ -9,6 +9,8 @@ signal free_b_node(node)
 signal b_node_freed
 signal game_over
 signal aim(state)
+signal add_ball
+signal remove_ball
 
 func _ready():
 	pass

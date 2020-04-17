@@ -5,17 +5,20 @@ extends Node2D
 onready var pre_brick = preload("res://scenes/block.tscn")
 onready var pre_shoot = preload("res://scenes/shoot.tscn")
 onready var pre_game_over = preload("res://scenes/game_over.tscn")
+onready var pre_bonus_ball = preload("res://scenes/bonus_ball.tscn")
 
 # Vars
 var stop = false
 var total_pts = 0
 var pts_counter = 0
+var ball_counter = 0
 var shoot_node = null
 var go_node = null
 var health_bonus = 0
 var min_health_bonus = 0
 var hide_aim = false
 var best_score = 0
+var active_bonus_ball = false
 
 #
 var brick_x_idx = [
@@ -65,6 +68,8 @@ func _draw():
 	draw_rect(Rect2(Vector2(0,0),Vector2(352,640)),Color(0,0,0,1),true)
 	var start = $shoot_sprite.global_position
 	var dir = start.direction_to(get_global_mouse_position())
+	if dir.y > -0.101514:
+		dir.y = -0.101514
 	var end = start + (dir*LINE_LENGTH)
 	if hide_aim == false and stop == false:
 		for i in range(1 , 12):
@@ -102,7 +107,7 @@ func add_bricks(y):
 		for i in range(0,brick_x_size):
 			randomize()
 			var add_brick = randi()%4
-			if add_brick == 1 or add_brick == 2:
+			if add_brick == 1 || add_brick == 2:
 				var brick = pre_brick.instance()
 				brick.global_position = Vector2(brick_x_idx[i],brick_y_idx[l])
 				brick.get_node("area").health_idx += health_bonus
@@ -111,6 +116,14 @@ func add_bricks(y):
 				brick.add_to_group("bricks")
 				brick.get_node("area").connect("pts" , self , "on_pts")
 				brick.connect("bonus_pts" , self , "on_bonus_pts")
+			elif add_brick == 3:
+				if active_bonus_ball == true:
+					var bonus_ball = pre_bonus_ball.instance()
+					bonus_ball.global_position = Vector2(brick_x_idx[i],brick_y_idx[l])
+					call_deferred("add_child" , bonus_ball)
+					bonus_ball.add_to_group("bonus_ball")
+					bonus_ball.connect("remove_ball" ,  self , "on_remove_ball")
+					active_bonus_ball = false
 
 # Function on_brick_down()
 # Controls how the blocks go down
@@ -119,7 +132,9 @@ func on_brick_down():
 		var br = get_tree().get_nodes_in_group("bricks")
 		for i in range(0 , br.size()):
 			br[i].position.y += 32
-		
+		var bb = get_tree().get_nodes_in_group("bonus_ball")
+		for i in range(0 , bb.size()):
+			bb[i].position.y +=32
 		add_bricks(1)
 
 # Points functions
@@ -129,10 +144,14 @@ func on_brick_down():
 func on_pts(pts):
 	total_pts += pts
 	pts_counter += pts
+	ball_counter += pts
 	if pts_counter == 2000:
 		health_bonus += 5
 		min_health_bonus += 5
 		pts_counter = 0
+	if ball_counter == 4000:
+		active_bonus_ball = true
+		ball_counter = 0
 
 # Increases total_pts when a block is destroyed
 func on_bonus_pts(bonus):
@@ -164,7 +183,6 @@ func on_game_over():
 		add_display()
 	else:
 		pass
-	best_score = DATA.game.high_score
 	if total_pts > best_score:
 		DATA.game.high_score = total_pts
 		DATA.save_game()
@@ -175,10 +193,12 @@ func add_display():
 	go_node = pre_game_over.instance()
 	call_deferred("add_child" , go_node)
 	go_node.get_node("game_over_label/go_pts_label").text = str("Total Points\n" , total_pts)
-	if total_pts > DATA.game.high_score:
-		go_node.get_node("game_over_label/high_label").text = str("NEW HIGH SCORE!")
+	DATA.load_game()
+	best_score = DATA.game.high_score
+	if total_pts > best_score:
+		go_node.get_node("game_over_label/high_label").text = str("NEW HIGH SCORE!\n" , total_pts)
 	else:
-		pass
+		go_node.get_node("game_over_label/high_label").text = str("Your high score\n" , best_score)
 
 # Function
 func on_new_game():
@@ -187,6 +207,8 @@ func on_new_game():
 	# Resets the points e points counter
 	total_pts = 0
 	pts_counter = 0
+	ball_counter = 0
+	active_bonus_ball = false
 	health_bonus = 0
 	min_health_bonus = 0
 	
@@ -209,3 +231,6 @@ func on_new_game():
 	# Queue free game over node from scene
 	SIGN.emit_signal("clear_screen")
 	$shoot_sprite.global_position = Vector2(180 , 630)
+
+func on_remove_ball():
+	active_bonus_ball = false
