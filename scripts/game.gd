@@ -16,7 +16,6 @@ var shoot_node = null
 var go_node = null
 var health_bonus = 0
 var min_health_bonus = 0
-#var hide_aim = false
 var best_score = 0
 var active_bonus_ball = false
 
@@ -173,7 +172,8 @@ func on_game_over():
 			DATA.save_game()
 		else:
 			pass
-	
+
+# Displays the game over scene
 func add_display():
 	go_node = pre_game_over.instance()
 	call_deferred("add_child" , go_node)
@@ -185,7 +185,7 @@ func add_display():
 	else:
 		go_node.get_node("game_over_label/high_label").text = str("Your high score\n" , best_score)
 
-# Function
+# Function to start new game
 func on_new_game():
 	stop = false
 	go_node = null
@@ -219,3 +219,7 @@ func on_new_game():
 
 func on_remove_ball():
 	active_bonus_ball = false
+
+func _notification(what):
+	if (what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST):
+		get_tree().change_scene("res://scenes/title.tscn")

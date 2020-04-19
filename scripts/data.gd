@@ -6,10 +6,10 @@ var game = {
 	"high_score" : 0,
 	"sound" : 
 		{
-			"fx" : 9,
-			"fx_vol" : 0,
-			"music" : 9,
-			"music_vol" : 0
+			"fx" : 5,
+			"fx_vol" : -12,
+			"music" : 5,
+			"music_vol" : -12
 		}
 }
 
