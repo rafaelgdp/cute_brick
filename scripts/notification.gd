@@ -12,6 +12,9 @@ signal aim(state)
 signal add_ball
 signal remove_ball
 signal display_menu
+signal hide_health
+
+#signal sound_config(s_c)
 
 func _ready():
 	pass

@@ -3,8 +3,15 @@ extends Node
 const FILE_NAME = "user://game_data.json"
 
 var game = {
-	"high_score" : 0
-	}
+	"high_score" : 0,
+	"sound" : 
+		{
+			"fx" : 9,
+			"fx_vol" : 0,
+			"music" : 9,
+			"music_vol" : 0
+		}
+}
 
 func save_game():
 	var file = File.new()

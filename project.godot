@@ -23,6 +23,7 @@ config/icon="res://resources/cute_brick_icon.png"
 
 SIGN="*res://scripts/notification.gd"
 DATA="*res://scripts/data.gd"
+LOG="*res://scripts/log_print.gd"
 
 [display]
 

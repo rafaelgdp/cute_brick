@@ -1,4 +1,4 @@
-[gd_scene load_steps=131 format=2]
+[gd_scene load_steps=132 format=2]
 
 [ext_resource path="res://scripts/block.gd" type="Script" id=1]
 [ext_resource path="res://sprites/white_block-3.png" type="Texture" id=2]
@@ -124,6 +124,7 @@
 [ext_resource path="res://sprites/red_block-hit-3.png" type="Texture" id=122]
 [ext_resource path="res://sprites/red_block-hit-2.png" type="Texture" id=123]
 [ext_resource path="res://sprites/red_block-4.png" type="Texture" id=124]
+[ext_resource path="res://scripts/label_node.gd" type="Script" id=125]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 17, 17 )
@@ -290,6 +291,7 @@ shape = SubResource( 5 )
 [node name="label_node" type="Node2D" parent="."]
 position = Vector2( 0, 16 )
 z_index = 1
+script = ExtResource( 125 )
 
 [node name="label" type="Label" parent="label_node"]
 margin_left = -20.0

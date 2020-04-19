@@ -16,7 +16,7 @@ var shoot_node = null
 var go_node = null
 var health_bonus = 0
 var min_health_bonus = 0
-var hide_aim = false
+#var hide_aim = false
 var best_score = 0
 var active_bonus_ball = false
 
@@ -62,27 +62,10 @@ func _ready():
 	SIGN.connect("brick_down" , self , "on_brick_down")
 	SIGN.connect("new_game" , self , "on_new_game")
 	SIGN.connect("update_cartridge" , self , "on_update_cartridge")
-	SIGN.connect("aim" , self , "aim")
 
 func _draw():
 	draw_rect(Rect2(Vector2(0,0),Vector2(352,640)),Color(0,0,0,1),true)
-	var start = $shoot_sprite.global_position
-	var dir = start.direction_to(get_global_mouse_position())
-	if dir.y > -0.101514:
-		dir.y = -0.101514
-	var end = start + (dir*LINE_LENGTH)
-	if hide_aim == false and stop == false:
-		for i in range(1 , 12):
-			var c = i
-			if (c % 2) != 0:
-				draw_line(start, end , Color(0,1,0,1), 2)
-			else:
-				draw_line(start, end , Color(0,0,0,0))
-			var next_start = end
-			start = next_start
-			end = start + (dir*LINE_LENGTH)
-	else:
-		draw_line(start, end , Color(0,0,0,1), 1)
+
 
 func _process(delta):
 	$pts_label.text = str("Points: " , total_pts)
@@ -96,9 +79,6 @@ func add_shooter():
 	s.add_to_group("muzzle")
 	s.global_position = Vector2(180 , 630)
 	call_deferred("add_child" , s)
-
-func aim(state):
-	hide_aim = state
 
 func add_bricks(y):
 	var brick_y_size = y
@@ -165,29 +145,34 @@ func on_update_cartridge(cartridge):
 # Display game over screen, hide block health
 # and queue_free() the shooter when the game is over
 func on_game_over():
-	stop = true
-
-	# Hide blocks health points
-	var b_roll = get_tree().get_nodes_in_group("bricks")
-	for i in b_roll:
-		i.get_node("label_node").visible = false
-
-	# Queue free the shooter
-	# Hides the shooter sprite
-	var m = get_tree().get_nodes_in_group("muzzle")
-	m[0].queue_free()
-	$shoot_sprite.visible = false
+	LOG.print("stop in on_game_over: %s" % stop)
+	if stop:
+		pass
+	else:
+		stop = true
 	
-	# Add the game over display into the scene
-	if go_node == null:
-		add_display()
-	else:
-		pass
-	if total_pts > best_score:
-		DATA.game.high_score = total_pts
-		DATA.save_game()
-	else:
-		pass
+		# Hide blocks health points
+		SIGN.emit_signal("hide_health")
+	
+		# Queue free the shooter
+		# Hides the shooter sprite
+		var m = get_tree().get_nodes_in_group("muzzle")
+		for i in m:
+			i.queue_free()
+		SIGN.emit_signal("aim")
+		
+		$shoot_sprite.visible = false
+
+		# Add the game over display into the scene
+		if go_node == null:
+			add_display()
+		else:
+			pass
+		if total_pts > best_score:
+			DATA.game.high_score = total_pts
+			DATA.save_game()
+		else:
+			pass
 	
 func add_display():
 	go_node = pre_game_over.instance()

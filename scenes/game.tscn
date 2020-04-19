@@ -61,6 +61,7 @@ shape = SubResource( 5 )
 
 [node name="shoot_sprite" type="Sprite" parent="."]
 position = Vector2( 180, 630 )
+z_index = 1
 texture = ExtResource( 4 )
 
 [node name="shoot_label" type="Label" parent="shoot_sprite"]

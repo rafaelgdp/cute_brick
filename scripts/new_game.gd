@@ -18,3 +18,6 @@ func on_clear_screen():
 
 func _on_new_game_button_up():
 	SIGN.emit_signal("new_game")
+
+func _on_title_pressed():
+	get_tree().change_scene("res://scenes/title.tscn")

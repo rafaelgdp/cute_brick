@@ -1,0 +1,160 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://sprites/ball.png" type="Texture" id=1]
+[ext_resource path="res://scripts/aim.gd" type="Script" id=2]
+[ext_resource path="res://sprites/ball_empty.png" type="Texture" id=3]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 3 ), ExtResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ ExtResource( 3 ), ExtResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=6]
+animations = [ {
+"frames": [ ExtResource( 3 ), ExtResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=7]
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=8]
+animations = [ {
+"frames": [ ExtResource( 3 ), ExtResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=9]
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=10]
+animations = [ {
+"frames": [ ExtResource( 3 ), ExtResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="aim" type="Node2D"]
+
+[node name="aim_node" type="Node2D" parent="."]
+script = ExtResource( 2 )
+
+[node name="sprite" type="AnimatedSprite" parent="aim_node"]
+rotation = 1.5708
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 1 )
+frame = 1
+playing = true
+
+[node name="sprite2" type="AnimatedSprite" parent="aim_node"]
+position = Vector2( 20, 0 )
+rotation = 1.5708
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 2 )
+playing = true
+
+[node name="sprite3" type="AnimatedSprite" parent="aim_node"]
+position = Vector2( 40, 0 )
+rotation = 1.5708
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 3 )
+playing = true
+
+[node name="sprite4" type="AnimatedSprite" parent="aim_node"]
+position = Vector2( 60, 0 )
+rotation = 1.5708
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 4 )
+playing = true
+
+[node name="sprite5" type="AnimatedSprite" parent="aim_node"]
+position = Vector2( 80, 0 )
+rotation = 1.5708
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 5 )
+playing = true
+
+[node name="sprite6" type="AnimatedSprite" parent="aim_node"]
+position = Vector2( 100, 0 )
+rotation = 1.5708
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 6 )
+playing = true
+
+[node name="sprite7" type="AnimatedSprite" parent="aim_node"]
+position = Vector2( 120, 0 )
+rotation = 1.5708
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 7 )
+playing = true
+
+[node name="sprite8" type="AnimatedSprite" parent="aim_node"]
+position = Vector2( 140, 0 )
+rotation = 1.5708
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 8 )
+playing = true
+
+[node name="sprite9" type="AnimatedSprite" parent="aim_node"]
+position = Vector2( 160, 0 )
+rotation = 1.5708
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 9 )
+playing = true
+
+[node name="sprite10" type="AnimatedSprite" parent="aim_node"]
+position = Vector2( 180, 0 )
+rotation = 1.5708
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 10 )
+playing = true
