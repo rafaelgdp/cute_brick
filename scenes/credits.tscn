@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://fonts/PressStart2P-Regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://scripts/credits.gd" type="Script" id=2]
@@ -100,6 +100,9 @@ size = 12
 font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=25]
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=26]
 size = 24
 outline_size = 2
 outline_color = Color( 0.501961, 0.501961, 0.501961, 1 )
@@ -118,7 +121,7 @@ __meta__ = {
 
 [node name="scroll" type="ScrollContainer" parent="."]
 margin_right = 352.0
-margin_bottom = 840.0
+margin_bottom = 1000.0
 rect_min_size = Vector2( 0, 840 )
 theme = SubResource( 6 )
 scroll_horizontal_enabled = false
@@ -127,8 +130,8 @@ __meta__ = {
 }
 
 [node name="vscroll" type="VScrollBar" parent="scroll"]
-margin_bottom = 1200.0
-rect_min_size = Vector2( 0, 1200 )
+margin_bottom = 1500.0
+rect_min_size = Vector2( 0, 1500 )
 size_flags_vertical = 3
 
 [node name="title" type="Label" parent="scroll/vscroll"]
@@ -487,7 +490,7 @@ margin_right = 352.0
 margin_bottom = 876.0
 size_flags_vertical = 3
 custom_fonts/font = SubResource( 22 )
-text = "Thank you for playing!"
+text = "Special Thanks"
 align = 1
 valign = 1
 autowrap = true
@@ -496,12 +499,26 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="thanks_label" type="Label" parent="scroll/vscroll/thanks"]
+margin_top = 40.0
+margin_right = 352.0
+margin_bottom = 94.0
+custom_fonts/font = SubResource( 25 )
+custom_colors/font_color = Color( 0.835294, 0.839216, 0.498039, 1 )
+custom_colors/font_outline_modulate = Color( 0.698039, 0.654902, 0.133333, 1 )
+text = "My daughter
+Godot community
+
+YOU"
+align = 1
+valign = 1
+
 [node name="back" type="Button" parent="."]
 margin_left = 244.0
 margin_top = 600.0
 margin_right = 352.0
 margin_bottom = 630.0
-custom_fonts/font = SubResource( 25 )
+custom_fonts/font = SubResource( 26 )
 custom_colors/font_color_pressed = Color( 0.501961, 0.501961, 0.501961, 1 )
 action_mode = 0
 text = "Back"

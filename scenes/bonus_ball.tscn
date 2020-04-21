@@ -28,6 +28,7 @@ font_data = ExtResource( 6 )
 [node name="sprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
 animation = "blink"
+frame = 3
 playing = true
 
 [node name="area" type="Area2D" parent="."]

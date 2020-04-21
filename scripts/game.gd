@@ -50,8 +50,8 @@ var brick_y_idx = [
 const LINE_LENGTH = 15
 
 func _ready():
-	$save.add_to_group("persist")
-	
+	$theme.play()
+
 # Call add_bricks to add the initial blocks
 	add_bricks(brick_y_idx.size())
 	add_shooter()
@@ -62,13 +62,8 @@ func _ready():
 	SIGN.connect("new_game" , self , "on_new_game")
 	SIGN.connect("update_cartridge" , self , "on_update_cartridge")
 
-func _draw():
-	draw_rect(Rect2(Vector2(0,0),Vector2(352,640)),Color(0,0,0,1),true)
-
-
 func _process(delta):
-	$pts_label.text = str("Points: " , total_pts)
-	update()
+	$pts_node/pts_label.text = str("Points: " , total_pts)
 
 # "Add" functions
 # Add the shooter and the blocks
@@ -221,5 +216,5 @@ func on_remove_ball():
 	active_bonus_ball = false
 
 func _notification(what):
-	if (what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST):
+	if what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST:
 		get_tree().change_scene("res://scenes/title.tscn")

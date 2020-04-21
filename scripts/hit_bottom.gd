@@ -21,4 +21,3 @@ func on_b_node_freed():
 
 func touch_bottom(node):
 	SIGN.emit_signal("game_over")
-	print("wait_hit: " , wait_hit)

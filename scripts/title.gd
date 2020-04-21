@@ -15,7 +15,6 @@ func _ready():
 	sound = DATA.game["sound"]
 	var m_idx = AudioServer.get_bus_index("music")
 	AudioServer.set_bus_volume_db(m_idx , sound.music_vol)
-	print(sound)
 	$theme.play()
 
 func _on_play_button_pressed():
@@ -39,3 +38,7 @@ func hide_buttons(state):
 
 func on_display_menu():
 	hide_buttons(true)
+
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST:
+		get_tree().quit()

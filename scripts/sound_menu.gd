@@ -14,7 +14,6 @@ var volume_value = 3
 func _ready():
 	DATA.load_game()
 	sound_d = DATA.game["sound"]
-	print(sound_d)
 	fx_label = sound_d.fx
 	fx_volume = sound_d.fx_vol
 	music_label = sound_d.music
@@ -35,7 +34,6 @@ func _on_fx_minus_pressed():
 		fx_volume = -24.0
 	save_fx()
 	DATA.save_game()
-	print(sound_d)
 	
 	$hit.play()
 
@@ -50,8 +48,7 @@ func _on_fx_plus_pressed():
 		fx_volume = 3
 	save_fx()
 	DATA.save_game()
-	print(sound_d)
-	
+
 	$hit.play()
 
 func _on_music_minus_pressed():
@@ -65,7 +62,7 @@ func _on_music_minus_pressed():
 		music_volume = 24.0
 	save_music()
 	DATA.save_game()
-	print(sound_d)
+
 
 func _on_music_plus_pressed():
 	if AudioServer.is_bus_mute(music_index):
@@ -78,7 +75,7 @@ func _on_music_plus_pressed():
 		music_volume = 3
 	save_music()
 	DATA.save_game()
-	print(sound_d)
+
 
 func save_fx():
 	sound_d.fx = fx_label
@@ -89,6 +86,9 @@ func save_music():
 	sound_d.music_vol = music_volume
 
 func _on_back_pressed():
-	print(sound_d)
 	SIGN.emit_signal("display_menu")
 	self.queue_free()
+
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_GO_BACK_REQUEST:
+		get_tree().change_scene("res://scenes/title.tscn")
